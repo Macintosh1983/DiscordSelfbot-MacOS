@@ -13,5 +13,6 @@
 - Emoji Stealer (requires image or emoji link)
 - Embed message (random color)
 - Status Editor
+- Avatar Saver 
 
 MACOS SELF BOT IS NOT IN ANY WAY A PRODUCT OF APPLE NOR IS IT A PRODUCT OF APPLE
