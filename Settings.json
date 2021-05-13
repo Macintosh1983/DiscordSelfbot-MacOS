@@ -1,0 +1,7 @@
+{
+    "token": "INSERT DISCORD TOKEN HERE",
+
+    "webhook": "INSERT WEBHOOK LINK HERE",
+
+    "prefix": "!"
+}
