@@ -71,6 +71,7 @@ async def help(ctx):
     embed.add_field(name=f'{prefix}shutdown', value='logs out', inline=False)
     embed.add_field(name=f'{prefix}embed', value='embeds text', inline=False)
     embed.add_field(name=f'{prefix}statushelp', value='sends all status cmds', inline=False)
+    embed.add_field(name=f'{prefix}avatarhelp', value='sends all avatar cmds', inline=False)
     await ctx.message.delete()
     await webhook.send(embed=embed)
 
@@ -191,7 +192,33 @@ async def statushelp(ctx):
     await ctx.message.delete()
     await webhook.send(embed=status)
 
+@bot.command()
+async def avj(ctx, member: discord.Member = None):
+    member = ctx.author if not member else member
+    await ctx.message.delete()
+    jpg = discord.Embed(color=discord.Color.red(), description=f"Saved pfp of {member}")
+    await member.avatar_url_as(format="jpg").save(fp=f"{member}.jpg")
+    await webhook.send(embed=jpg)
 
+@bot.command()
+async def avg(ctx, member: discord.Member = None):
+    member = ctx.author if not member else member
+    await ctx.message.delete()
+    gif = discord.Embed(color=discord.Color.red(), description=f"Saved pfp of {member}")
+    await member.avatar_url_as(format="gif").save(fp=f"{member}.gif")
+    await webhook.send(embed=gif)
+
+@bot.command(pass_context=True)
+async def avatarhelp(ctx):
+    author = ctx.message.author
+    avatar = discord.Embed(
+        color = discord.Color.red()
+    ) 
+    avatar.set_author(name='STATUS OPTIONS')
+    avatar.add_field(name=f'{prefix}avj', value='Saves a users pfp as a jpg', inline=False)
+    avatar.add_field(name=f'{prefix}avg', value='Saves a users pfp as a gif', inline=False)
+    await ctx.message.delete()
+    await webhook.send(embed=avatar)
 
 
 bot.run(token, bot=False)
