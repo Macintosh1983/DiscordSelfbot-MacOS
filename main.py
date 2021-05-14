@@ -1,9 +1,12 @@
-from aiohttp.client import ClientSession
+from logging import exception
+import re
+from aiohttp.client import ClientSession, request
 import discord, json
 import time
 import aiohttp
 import datetime
 import sys
+import requests
 from datetime import datetime
 from discord import Webhook, AsyncWebhookAdapter
 from discord import client
@@ -118,23 +121,32 @@ async def spam(ctx, *, msg):
 @bot.command(pass_context=True)
 async def massrename(ctx, nick):
     await ctx.message.delete()
-    for guild in bot.guilds:
-        for member in guild.members:
+    for member in list(ctx.guild.members):
+        try:
             await member.edit(nick=nick)
+            success = discord.Embed(color=discord.Color.green(), description=F"changed all users in guild to: {nick}")
+            await webhook.send(embed=success)
+        except exception as e:
+            error = discord.Embed(color=discord.Color.dark_red(), description=F"error unable to edit: {member.name}")
+            await webhook.send(embed=error)
 
 @bot.command(aliases=['e'])
 async def emoji(ctx, url: str, *, name):
+    await ctx.message.delete()
     async with bot.session.get(url) as r:
         try:
             if r.status in range (200, 299):
                 img = BytesIO(await r.read())
                 bytes = img.getvalue()
                 emoji = await ctx.guild.create_custom_emoji(image=bytes, name=name)
-                await webhook.send(f"Emoji Made: {emoji}")
+                success = discord.Embed(color=discord.Color.green(), description=F"Emoji made! {emoji}")
+                await webhook.send(embed=success)
             else:
-                await webhook.send("ERROR 404")
+                error1 = discord.Embed(color=discord.Color.dark_red(), description=F"!!ERROR|UNKNOWN!!")
+                await webhook.send(embed=error1)
         except discord.HTTPException:
-            await webhook.send("`ERROR IMAGE SIZE TOO LARGE OR WRONG FORMAT!`")
+            error2 = discord.Embed(color=discord.Color.red(), description=F"ERROR|UNSUPPORTED IMAGE TYPE OR FILE TOO LARGE")
+            await webhook.send(embed=error2)
 
 
 @bot.command()
@@ -219,6 +231,5 @@ async def avatarhelp(ctx):
     avatar.add_field(name=f'{prefix}avg', value='Saves a users pfp as a gif', inline=False)
     await ctx.message.delete()
     await webhook.send(embed=avatar)
-
 
 bot.run(token, bot=False)
