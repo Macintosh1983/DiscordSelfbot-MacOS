@@ -208,7 +208,7 @@ async def statushelp(ctx):
 async def avj(ctx, member: discord.Member = None):
     member = ctx.author if not member else member
     await ctx.message.delete()
-    jpg = discord.Embed(color=discord.Color.red(), description=f"Saved pfp of {member}")
+    jpg = discord.Embed(color=discord.Color.green(), description=f"Saved pfp of {member}")
     await member.avatar_url_as(format="jpg").save(fp=f"{member}.jpg")
     await webhook.send(embed=jpg)
 
@@ -216,7 +216,7 @@ async def avj(ctx, member: discord.Member = None):
 async def avg(ctx, member: discord.Member = None):
     member = ctx.author if not member else member
     await ctx.message.delete()
-    gif = discord.Embed(color=discord.Color.red(), description=f"Saved pfp of {member}")
+    gif = discord.Embed(color=discord.Color.green(), description=f"Saved pfp of {member}")
     await member.avatar_url_as(format="gif").save(fp=f"{member}.gif")
     await webhook.send(embed=gif)
 
