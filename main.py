@@ -15,7 +15,7 @@ from io import BytesIO
 from colorama import Fore, Back, Style, init
 from discord.ext.commands.core import Command
 
-version = "V.3"
+version = "V.4"
 system(f'title MacOS SelfBot {version}')
 with open('./Settings.json') as m:
     Settings = json.load(m)
@@ -24,6 +24,8 @@ webhook = Settings.get('webhook')
 prefix = Settings.get('prefix')
 bot = commands.Bot(command_prefix=prefix, self_bot=True)
 bot.remove_command("help")
+bot.session = aiohttp.ClientSession()
+webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
 
 init(autoreset=True)
 print(Fore.LIGHTCYAN_EX + '''
@@ -44,9 +46,6 @@ async def on_connect():
 
 @bot.event
 async def on_ready():
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     global timestart
     timestart = datetime.now()
     init(autoreset=True)
@@ -73,9 +72,6 @@ async def hello(ctx):
 
 @bot.command(pass_context=True)
 async def help(ctx):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     embed = discord.Embed(
         color = discord.Color.red()
     ) 
@@ -95,9 +91,6 @@ async def help(ctx):
 
 @bot.command(aliases=["ui"])
 async def userinfo(ctx, member: discord.Member = None):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     member = ctx.author if not member else member
     print(f"user info of {member} sent!")
     roles = [role for role in member.roles]
@@ -117,9 +110,6 @@ async def userinfo(ctx, member: discord.Member = None):
 
 @bot.command()
 async def nuke(ctx):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     msg = discord.Embed(color=discord.Color.gold(), timestamp=ctx.message.created_at)
     msg.set_author(name=f"Nuked {ctx.guild.name}!")
@@ -130,9 +120,6 @@ async def nuke(ctx):
 
 @bot.command()
 async def spam(ctx, *, msg):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     num = 10
     for x in range(num):
@@ -144,9 +131,6 @@ async def spam(ctx, *, msg):
 
 @bot.command(aliases=['e'])
 async def emoji(ctx, url: str, *, name):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     async with bot.session.get(url) as r:
         try:
@@ -166,9 +150,6 @@ async def emoji(ctx, url: str, *, name):
 
 @bot.command()
 async def shutdown(ctx):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     shutdown = discord.Embed(color=discord.Color.dark_red(), description="MacOS has shutdown!")
     await webhook.send(embed=shutdown, username=bot.user.name, avatar_url=bot.user.avatar_url)
@@ -182,9 +163,6 @@ async def embed(ctx, msg):
 
 @bot.command()
 async def statusP(ctx, *, status):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     statusP = discord.Embed(color=discord.Color.green(), description=f"Changed Status to Playing {status}")
     await webhook.send(embed=statusP, username=bot.user.name, avatar_url=bot.user.avatar_url)
@@ -192,9 +170,6 @@ async def statusP(ctx, *, status):
 
 @bot.command()
 async def statusL(ctx, *, status):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     statusL = discord.Embed(color=discord.Color.green(), description=f"Changed Status to Listning to {status}")
     await webhook.send(embed=statusL, username=bot.user.name, avatar_url=bot.user.avatar_url)
@@ -202,9 +177,6 @@ async def statusL(ctx, *, status):
 
 @bot.command()
 async def statusW(ctx, *, status):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     statusW = discord.Embed(color=discord.Color.green(), description=f"Changed Status to Watching {status}")
     await webhook.send(embed=statusW, username=bot.user.name, avatar_url=bot.user.avatar_url)
@@ -212,9 +184,6 @@ async def statusW(ctx, *, status):
 
 @bot.command()
 async def removestatus(ctx):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     await ctx.message.delete()
     remove = discord.Embed(color=discord.Color.red(), description="Removed Status!")
     await webhook.send(embed=remove, username=bot.user.name, avatar_url=bot.user.avatar_url)
@@ -222,9 +191,6 @@ async def removestatus(ctx):
 
 @bot.command(pass_context=True)
 async def statushelp(ctx):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     status = discord.Embed(
         color = discord.Color.red()
     ) 
@@ -238,9 +204,6 @@ async def statushelp(ctx):
 
 @bot.command()
 async def avj(ctx, member: discord.Member = None):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     member = ctx.author if not member else member
     await ctx.message.delete()
     jpg = discord.Embed(color=discord.Color.green(), description=f"Saved pfp of {member}")
@@ -249,9 +212,6 @@ async def avj(ctx, member: discord.Member = None):
 
 @bot.command()
 async def avg(ctx, member: discord.Member = None):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     member = ctx.author if not member else member
     await ctx.message.delete()
     gif = discord.Embed(color=discord.Color.green(), description=f"Saved pfp of {member}")
@@ -260,9 +220,6 @@ async def avg(ctx, member: discord.Member = None):
 
 @bot.command(pass_context=True)
 async def avatarhelp(ctx):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     avatar = discord.Embed(
         color = discord.Color.red()
     ) 
@@ -274,9 +231,6 @@ async def avatarhelp(ctx):
 
 @bot.command()
 async def guild(ctx):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     icon = ctx.guild.icon_url
     await ctx.message.delete()
     jpg = discord.Embed(color=discord.Color.green(), description=f"{icon}")
@@ -284,9 +238,6 @@ async def guild(ctx):
 
 @bot.command(aliases=["av"])
 async def avatar(ctx, member: discord.Member = None):
-    webhook = Settings.get('webhook')
-    bot.session = aiohttp.ClientSession()
-    webhook = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(bot.session))
     member = ctx.author if not member else member
     show_avatar = discord.Embed(
 
