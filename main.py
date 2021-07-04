@@ -50,7 +50,7 @@ async def on_ready():
     timestart = datetime.now()
     init(autoreset=True)
     print(Fore.LIGHTMAGENTA_EX+' USER INFO AND SETTINGS BELLOW!!')
-    print(Fore.LIGHTMAGENTA_EX+'')
+    print(Fore.LIGHTMAGENTA_EX+'--------------------------------')
     print(Fore.LIGHTCYAN_EX+f' Logged in as: {bot.user}!')
     print(Fore.LIGHTCYAN_EX+f' User id is: {bot.user.id}!')
     print(Fore.LIGHTCYAN_EX+f' Total guilds: {len(bot.guilds)}')
